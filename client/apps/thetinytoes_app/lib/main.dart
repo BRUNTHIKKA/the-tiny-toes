@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thetinytoes_app/users_page.dart';
 import 'auth_provider.dart';
 import 'storage_service.dart';
+import 'user_provider.dart';
 import 'login_page.dart';
+import 'users_page.dart';
 
 void main() {
   runApp(
@@ -11,6 +12,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => StorageService()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MyApp(),
     ),

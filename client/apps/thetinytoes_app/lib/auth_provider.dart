@@ -7,8 +7,4 @@ class AuthProvider with ChangeNotifier {
   bool validateLogin(String username, String password) {
     return username == _username && password == _password;
   }
-
-  void validateLogout() {
-    notifyListeners();
-  }
 }

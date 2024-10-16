@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thetinytoes_app/auth_provider.dart';
-import 'package:thetinytoes_app/login_page.dart';
-import 'package:thetinytoes_app/storage_service.dart';
-import 'package:thetinytoes_app/user_provider.dart';
-
+import 'user_provider.dart';
+import 'auth_provider.dart';
+import 'login_page.dart';
+import 'storage_service.dart';
 
 class UsersPage extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final storageService = Provider.of<StorageService>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    // Fetch users if not already fetched
+    if (userProvider.networkState == NetworkState.idle) {
+      userProvider.fetchUsers();
+    }
 
     return Material(
       child: Column(
@@ -27,8 +30,6 @@ class UsersPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       await storageService.clearStorage();
-                      authProvider.validateLogout(); 
-
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -51,12 +52,92 @@ class UsersPage extends StatelessWidget {
                     child: const Text('Logout'),
                   ),
                 ),
-                
-        ],
-      ),
+                const SizedBox(width: 100),
+                const Text(
+                  "Users",
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 100),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.blue,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.person_2_outlined,
+                      size: 20,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Add user list or relevant UI based on network state
+          Expanded(
+            child: _buildBody(userProvider),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildBody(UserProvider userProvider) {
+    switch (userProvider.networkState) {
+      case NetworkState.loading:
+        return Center(child: CircularProgressIndicator());
+
+      case NetworkState.success:
+        return ListView.builder(
+          itemCount: userProvider.users.length,
+          itemBuilder: (context, index) {
+            var user = userProvider.users[index];
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ),
+                ),
+                child: ListTile(
+                  title: Text(
+                    user['name'],
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+
+      case NetworkState.failure:
+        return const Center(
+          child: Text(
+            'Failed to load users',
+            style: TextStyle(color: Colors.red, fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        );
+
+      default:
+        return Container();
+    }
   }
 }
