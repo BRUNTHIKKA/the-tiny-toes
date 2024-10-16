@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
         listen: false); // Get storage service
 
     return Scaffold(
-      body: Padding(
+      body:Padding(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 120),
         child: Column(
           children: [
@@ -123,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+       
     );
   }
 
