@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:thetinytoes_app/login_page.dart';
+import 'package:provider/provider.dart';
+import 'package:thetinytoes_app/users_page.dart';
+import 'auth_provider.dart';
+import 'storage_service.dart';
+import 'login_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => StorageService()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      title: 'The Tiny Toes',
       home: LoginPage(),
+      routes: {
+        '/users': (context) => UsersPage(),
+        '/login': (context) => LoginPage(),
+      },
     );
   }
 }
-
-
