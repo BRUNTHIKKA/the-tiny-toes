@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'network_service.dart';
 import 'storage_service.dart';
 
-enum NetworkState { idle, loading, success, failure }
-
 class UserProvider with ChangeNotifier {
   final NetworkService networkService = NetworkService();
   final StorageService storageService = StorageService();

@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thetinytoes_app/album_page.dart';
+import 'package:thetinytoes_app/album_provider.dart';
+import 'package:thetinytoes_app/network_service.dart';
 import 'user_provider.dart';
 import 'auth_provider.dart';
 import 'login_page.dart';
 import 'storage_service.dart';
 
-class UsersPage extends StatelessWidget {
+class UsersPage extends StatefulWidget {
+  @override
+  _UsersPageState createState() => _UsersPageState();
+}
+
+class _UsersPageState extends State<UsersPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Fetch users after the first frame is rendered to avoid calling fetch during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserProvider>(context, listen: false).fetchUsers();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final storageService = Provider.of<StorageService>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-
-    // Fetch users if not already fetched
-    if (userProvider.networkState == NetworkState.idle) {
-      userProvider.fetchUsers();
-    }
 
     return Material(
       child: Column(
@@ -36,7 +49,8 @@ class UsersPage extends StatelessWidget {
                       );
                     },
                     style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
                       side: MaterialStateProperty.all<BorderSide>(
                         BorderSide(color: Colors.red),
                       ),
@@ -121,6 +135,15 @@ class UsersPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  onTap: () {
+                    // Navigate to AlbumPage when the user is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AlbumPage(userId: user['id']),
+                      ),
+                    );
+                  },
                 ),
               ),
             );
