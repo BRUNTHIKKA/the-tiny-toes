@@ -140,7 +140,7 @@ class _UsersPageState extends State<UsersPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AlbumPage(userId: user['id']),
+                        builder: (context) => AlbumPage(userId: user['id'], username: user['name'],),
                       ),
                     );
                   },
