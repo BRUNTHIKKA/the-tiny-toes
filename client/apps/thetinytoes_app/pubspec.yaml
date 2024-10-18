@@ -18,9 +18,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
-Flutter Version: 3.7.10
-Dart Version: 2.19.0
-Java Version: 11.0.2
+Flutter Version: 3.19.6
+Dart Version: 3.3.4 
+Java Version: 17.0.11
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
