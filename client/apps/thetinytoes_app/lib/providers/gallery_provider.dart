@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:thetinytoes_app/network_service.dart';
-import 'package:http/http.dart' as http;
+import 'package:thetinytoes_app/services/network_service.dart';
 
 class GalleryProvider extends ChangeNotifier {
   List<dynamic> _gallery = [];

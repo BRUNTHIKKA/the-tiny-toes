@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thetinytoes_app/auth_provider.dart';
-import 'package:thetinytoes_app/storage_service.dart';
+import 'package:thetinytoes_app/providers/auth_provider.dart';
+import 'package:thetinytoes_app/services/storage_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkLoginStatus();
     });
   }
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 120),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 120),
         child: Column(
           children: [
             const Text(

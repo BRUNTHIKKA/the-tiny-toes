@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'network_service.dart';
+import '../services/network_service.dart';
 
 class AlbumProvider extends ChangeNotifier {
   List<dynamic> _albums = [];

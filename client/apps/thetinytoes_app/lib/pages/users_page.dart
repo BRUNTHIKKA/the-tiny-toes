@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thetinytoes_app/album_page.dart';
-import 'package:thetinytoes_app/network_service.dart';
-import 'user_provider.dart';
-import 'login_page.dart';
-import 'storage_service.dart';
+import 'package:thetinytoes_app/components/navbar.dart';
+import 'package:thetinytoes_app/pages/album_page.dart';
+import 'package:thetinytoes_app/services/network_service.dart';
+import '../providers/user_provider.dart';
+import '../services/storage_service.dart';
 
 class UsersPage extends StatefulWidget {
   @override
@@ -38,84 +38,12 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final storageService = Provider.of<StorageService>(context, listen: false);
 
     return Material(
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Row(
-              children: [
-                Container(
-                  height: 30,
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await storageService.clearStorage();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red),
-                      side: MaterialStateProperty.all<BorderSide>(
-                        BorderSide(color: Colors.red),
-                      ),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        const TextStyle(fontSize: 16),
-                      ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                    ),
-                    child: const Text('Logout'),
-                  ),
-                ),
-                const SizedBox(width: 100),
-                const Text(
-                  "Users",
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  loggedUsername ?? 'Loading...',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.blue,
-                      width: 1.0,
-                    ),
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.person_2_outlined,
-                      size: 20,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+          // Navbar
+          Navbar(title: "Users", username: loggedUsername, goBack: null),
           // Add user list or relevant UI based on network state
           Expanded(
             child: _buildBody(userProvider),
@@ -136,7 +64,7 @@ class _UsersPageState extends State<UsersPage> {
           itemBuilder: (context, index) {
             var user = userProvider.users[index];
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
