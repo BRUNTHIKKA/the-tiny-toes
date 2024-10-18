@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
         listen: false); // Get storage service
 
     return Scaffold(
-      body:Padding(
+      body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 120),
         child: Column(
           children: [
@@ -60,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20),
             TextFormField(
               controller: passwordController,
+              obscureText: true,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
@@ -123,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-       
     );
   }
 

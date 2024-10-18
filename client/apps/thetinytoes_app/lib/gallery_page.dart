@@ -4,12 +4,12 @@ import 'package:thetinytoes_app/album_page.dart';
 import 'package:thetinytoes_app/gallery_provider.dart';
 import 'package:thetinytoes_app/login_page.dart';
 import 'package:thetinytoes_app/network_service.dart';
+import 'package:thetinytoes_app/photo_page.dart';
 import 'package:thetinytoes_app/storage_service.dart';
 
 class GalleryPage extends StatefulWidget {
   final int albumId;
   final String albumName;
-
   final int userId;
   final String userName;
 
@@ -189,7 +189,7 @@ class _GalleryPageState extends State<GalleryPage> {
                   case NetworkState.success:
                     return galleryProvider.gallery.isNotEmpty
                         ? GridView.builder(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(5),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
@@ -200,35 +200,54 @@ class _GalleryPageState extends State<GalleryPage> {
                             itemCount: galleryProvider.gallery.length,
                             itemBuilder: (context, index) {
                               var galleryItem = galleryProvider.gallery[index];
-                              return Column(
-                                children: [
-                                  // Thumbnail Image
-                                  Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8),
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PhotoPage(
+                                        albumId: widget.albumId,
+                                        albumName: widget.albumName,
+                                        userId: widget.userId,
+                                        userName: widget.userName,
+                                        photoName: galleryItem['title'],
+                                        photoUrl: galleryItem['url'],
+                                      ),
                                     ),
-                                    child: Image.asset(
-                                      '../images/img.png',
-                                      fit: BoxFit.cover,
-                                    ),
+                                  );
+                                },
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors
+                                      .click,
+                                  child: Column(
+                                    children: [
+                                      // Thumbnail Image
+                                      Image.asset(
+                                        galleryItem['thumbnailUrl'] ??
+                                            '../images/img.png',
+                                        fit: BoxFit.fill,
+                                        height: 100,
+                                        width: 100,
+                                      ),
+
+                                      const SizedBox(height: 5),
+
+                                      // Image name displayed under the thumbnail
+                                      Text(
+                                        galleryItem['title'] != null &&
+                                                galleryItem['title'].length > 25
+                                            ? '${galleryItem['title']!.substring(0, 25)}...'
+                                            : galleryItem['title'] ?? 'Unknown',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 5),
-                                  // Image name displayed under the thumbnail
-                                  Text(
-                                    galleryItem['title'] != null &&
-                                            galleryItem['title'].length > 25
-                                        ? '${galleryItem['title']!.substring(0, 25)}...'
-                                        : galleryItem['title'] ?? 'Unknown',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                                ),
                               );
                             },
                           )

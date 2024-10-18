@@ -7,13 +7,18 @@ class StorageService extends ChangeNotifier {
     await prefs.setString('username', username);
   }
 
+  
   Future<String?> getUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('username');
   }
-
   Future<void> clearStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+  }
+
+  Future<String?> getAlbumName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('albumName');
   }
 }
