@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thetinytoes_app/gallery_page.dart';
+import 'package:thetinytoes_app/album_page.dart';
+import 'package:thetinytoes_app/gallery_provider.dart';
 import 'package:thetinytoes_app/login_page.dart';
 import 'package:thetinytoes_app/network_service.dart';
 import 'package:thetinytoes_app/storage_service.dart';
-import 'package:thetinytoes_app/users_page.dart';
-import 'album_provider.dart';
 
-class AlbumPage extends StatefulWidget {
+class GalleryPage extends StatefulWidget {
+  final int albumId;
+  final String albumName;
+
   final int userId;
   final String userName;
 
-  AlbumPage({required this.userId, required this.userName});
+  GalleryPage({
+    required this.albumId,
+    required this.albumName,
+    required this.userId,
+    required this.userName,
+  });
 
   @override
-  _AlbumPageState createState() => _AlbumPageState();
+  _GalleryPageState createState() => _GalleryPageState();
 }
 
-class _AlbumPageState extends State<AlbumPage> {
+class _GalleryPageState extends State<GalleryPage> {
   String? loggedUsername;
 
   @override
   void initState() {
     super.initState();
-    // Fetch albums for the current userId
+    // Fetch gallery for the selected albumId
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final albumProvider = Provider.of<AlbumProvider>(context, listen: false);
-      albumProvider.fetchAlbums(widget.userId);
+      final galleryProvider =
+          Provider.of<GalleryProvider>(context, listen: false);
+      galleryProvider.fetchGallery(widget.albumId);
       fetchUsername();
     });
   }
@@ -34,20 +42,17 @@ class _AlbumPageState extends State<AlbumPage> {
   // Method to fetch the username
   void fetchUsername() async {
     final storageService = Provider.of<StorageService>(context, listen: false);
-    String? username = await storageService.getUsername(); // Fetch username
+    String? username = await storageService.getUsername();
     setState(() {
-      loggedUsername = username; // Update state with the fetched username
+      loggedUsername = username;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final albumProvider = Provider.of<AlbumProvider>(context);
-
     return Scaffold(
       body: Column(
         children: [
-
           // Navbar
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
@@ -65,9 +70,14 @@ class _AlbumPageState extends State<AlbumPage> {
                   ),
                   child: IconButton(
                     onPressed: () {
+                      // Navigate to AlbumPage on back button click
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => UsersPage()),
+                        MaterialPageRoute(
+                            builder: (context) => AlbumPage(
+                                  userId: widget.userId,
+                                  userName: widget.userName,
+                                )),
                       );
                     },
                     icon: Icon(
@@ -111,7 +121,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 ),
                 const SizedBox(width: 100),
                 const Text(
-                  "Album",
+                  "Gallery",
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -150,9 +160,9 @@ class _AlbumPageState extends State<AlbumPage> {
           ),
 
           const SizedBox(height: 20),
-          // Display selected Username
+          // Display selected Album Name
           Text(
-            widget.userName,
+            widget.albumName,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -160,74 +170,71 @@ class _AlbumPageState extends State<AlbumPage> {
           ),
           const SizedBox(height: 20),
 
-          // Displaying Albums for the selected user
           Expanded(
-            child: Consumer<AlbumProvider>(
-              builder: (context, albumProvider, child) {
-                switch (albumProvider.networkState) {
+            child: Consumer<GalleryProvider>(
+              builder: (context, galleryProvider, child) {
+                switch (galleryProvider.networkState) {
                   case NetworkState.loading:
                     return Center(child: CircularProgressIndicator());
 
                   case NetworkState.failure:
                     return const Center(
                       child: Text(
-                        'Failed to load albums. Please try again later.',
+                        'Failed to load gallery. Please try again later.',
                         style: TextStyle(color: Colors.red, fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                     );
 
                   case NetworkState.success:
-                    return albumProvider.albums.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: albumProvider.albums.length,
+                    return galleryProvider.gallery.isNotEmpty
+                        ? GridView.builder(
+                            padding: const EdgeInsets.all(10),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: galleryProvider.gallery.length,
                             itemBuilder: (context, index) {
-                              var album = albumProvider.albums[index];
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                      width: 1.0,
+                              var galleryItem = galleryProvider.gallery[index];
+                              return Column(
+                                children: [
+                                  // Thumbnail Image
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Image.asset(
+                                      '../images/img.png',
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.grey[500],
-                                      child: Text(
-                                        album['title'][0].toUpperCase(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                  const SizedBox(height: 5),
+                                  // Image name displayed under the thumbnail
+                                  Text(
+                                    galleryItem['title'] != null &&
+                                            galleryItem['title'].length > 25
+                                        ? '${galleryItem['title']!.substring(0, 25)}...'
+                                        : galleryItem['title'] ?? 'Unknown',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
                                     ),
-                                    title: Text(album['title']),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => GalleryPage(
-                                            albumId: album['id'],
-                                            albumName: album['title'],
-                                            userId: widget.userId,
-                                            userName: widget.userName,
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
+                                ],
                               );
                             },
                           )
                         : const Center(
                             child: Text(
-                              'No albums found.',
+                              'No gallery items found.',
                               style: TextStyle(fontSize: 18),
                             ),
                           );

@@ -23,6 +23,17 @@ class NetworkService {
       throw Exception('Failed to load albums');
     }
   }
+
+  // Fetch Gallery
+  Future<List> fetchGallery(int albumId) async {
+    final response = await http.get(Uri.parse(
+        'https://jsonplaceholder.typicode.com/albums/$albumId/photos'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load gallery');
+    }
+  }
 }
 
 enum NetworkState { idle, loading, success, failure }

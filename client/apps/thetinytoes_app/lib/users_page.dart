@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/album_page.dart';
-import 'package:thetinytoes_app/album_provider.dart';
 import 'package:thetinytoes_app/network_service.dart';
 import 'user_provider.dart';
-import 'auth_provider.dart';
 import 'login_page.dart';
 import 'storage_service.dart';
 
@@ -14,13 +12,26 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
+  String? loggedUsername;
+
   @override
   void initState() {
     super.initState();
 
     // Fetch users after the first frame is rendered to avoid calling fetch during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<UserProvider>(context, listen: false).fetchUsers();
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.fetchUsers();
+      fetchUsername();
+    });
+  }
+
+  // Method to fetch the username
+  void fetchUsername() async {
+    final storageService = Provider.of<StorageService>(context, listen: false);
+    String? username = await storageService.getUsername(); // Fetch username
+    setState(() {
+      loggedUsername = username; // Update state with the fetched username
     });
   }
 
@@ -28,7 +39,6 @@ class _UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final storageService = Provider.of<StorageService>(context, listen: false);
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Material(
       child: Column(
@@ -74,7 +84,15 @@ class _UsersPageState extends State<UsersPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 100),
+                const Spacer(),
+                Text(
+                  loggedUsername ?? 'Loading...',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                SizedBox(width: 10),
                 Container(
                   width: 35,
                   height: 35,
@@ -140,8 +158,10 @@ class _UsersPageState extends State<UsersPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AlbumPage(userId: user['id'], username: user['name'],),
-                      ),
+                          builder: (context) => AlbumPage(
+                                userId: user['id'],
+                                userName: user['name'],
+                              )),
                     );
                   },
                 ),
