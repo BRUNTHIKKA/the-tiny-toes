@@ -39,16 +39,19 @@ class _UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 
-    return Material(
-      child: Column(
-        children: [
-          // Navbar
-          Navbar(title: "Users", username: loggedUsername, goBack: null),
-          // Add user list or relevant UI based on network state
-          Expanded(
-            child: _buildBody(userProvider),
-          ),
-        ],
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 40),
+        child: Column(
+          children: [
+            // Navbar
+            Navbar(title: "Users", username: loggedUsername, goBack: null),
+            // Add user list or relevant UI based on network state
+            Expanded(
+              child: _buildBody(userProvider),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -52,95 +52,98 @@ class _PhotosState extends State<PhotoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Navbar
-          Navbar(
-              title: "Gallery",
-              username: loggedUsername,
-              goBack: () {
-                // Navigate to GalleryPage on back button click
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GalleryPage(
-                      userId: widget.userId,
-                      userName: widget.userName,
-                      albumId: widget.albumId,
-                      albumName: widget.albumName,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 40),
+        child: Column(
+          children: [
+            // Navbar
+            Navbar(
+                title: "Gallery",
+                username: loggedUsername,
+                goBack: () {
+                  // Navigate to GalleryPage on back button click
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GalleryPage(
+                        userId: widget.userId,
+                        userName: widget.userName,
+                        albumId: widget.albumId,
+                        albumName: widget.albumName,
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
 
-          // Display selected Gallery Name
-          SizedBox(height: 10),
-          Text(
-            widget.photoName,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            // Display selected Gallery Name
+            SizedBox(height: 10),
+            Text(
+              widget.photoName,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 40),
-          Column(
-            children: [
-              Image.asset(
-                widget.photoUrl ?? '../images/img.png',
-                fit: BoxFit.fill,
-                height: 400,
-                width: 400,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 60),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          '  Artist ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          widget.userName,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Text(
-                          'Album ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          widget.albumName,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                Image.asset(
+                  '../images/img.png',
+                  fit: BoxFit.fill,
+                  height: 350,
+                  width: 350,
                 ),
-              ),
-            ],
-          ),
-        ],
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            '  Artist ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            widget.userName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const Text(
+                            'Album ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            widget.albumName,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

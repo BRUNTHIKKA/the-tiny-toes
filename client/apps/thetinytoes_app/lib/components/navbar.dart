@@ -51,7 +51,7 @@ class Navbar extends StatelessWidget {
               ),
             ),
           if (goBack != null)
-            SizedBox(width: 20), // Add space if back button is present
+            SizedBox(width: 10), // Add space if back button is present
 
           Container(
             height: 30,
@@ -64,7 +64,7 @@ class Navbar extends StatelessWidget {
                   BorderSide(color: Colors.red),
                 ),
                 textStyle: MaterialStateProperty.all<TextStyle>(
-                  const TextStyle(fontSize: 16),
+                  const TextStyle(fontSize: 14),
                 ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -75,13 +75,14 @@ class Navbar extends StatelessWidget {
               child: const Text('Logout'),
             ),
           ),
-          const SizedBox(width: 100),
+          const SizedBox(width: 20),
           Text(
             title,
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
           const Spacer(),
           Text(

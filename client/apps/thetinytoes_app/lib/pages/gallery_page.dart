@@ -51,130 +51,135 @@ class _GalleryPageState extends State<GalleryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Navbar
-          Navbar(
-              title: "Gallery",
-              username: loggedUsername,
-              goBack: () {
-                // Navigate to AlbumPage on back button click
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AlbumPage(
-                      userId: widget.userId,
-                      userName: widget.userName,
-                    ),
-                  ),
-                );
-              }),
-          const SizedBox(height: 20),
-          // Display selected Album Name
-          Text(
-            widget.albumName,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          Expanded(
-            child: Consumer<GalleryProvider>(
-              builder: (context, galleryProvider, child) {
-                switch (galleryProvider.networkState) {
-                  case NetworkState.loading:
-                    return Center(child: CircularProgressIndicator());
-
-                  case NetworkState.failure:
-                    return const Center(
-                      child: Text(
-                        'Failed to load gallery. Please try again later.',
-                        style: TextStyle(color: Colors.red, fontSize: 18),
-                        textAlign: TextAlign.center,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 40),
+        child: Column(
+          children: [
+            // Navbar
+            Navbar(
+                title: "Gallery",
+                username: loggedUsername,
+                goBack: () {
+                  // Navigate to AlbumPage on back button click
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AlbumPage(
+                        userId: widget.userId,
+                        userName: widget.userName,
                       ),
-                    );
-
-                  case NetworkState.success:
-                    return galleryProvider.gallery.isNotEmpty
-                        ? GridView.builder(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 10),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 1,
-                            ),
-                            itemCount: galleryProvider.gallery.length,
-                            itemBuilder: (context, index) {
-                              var galleryItem = galleryProvider.gallery[index];
-
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PhotoPage(
-                                        albumId: widget.albumId,
-                                        albumName: widget.albumName,
-                                        userId: widget.userId,
-                                        userName: widget.userName,
-                                        photoName: galleryItem['title'],
-                                        photoUrl: galleryItem['url'],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Column(
-                                    children: [
-                                      // Thumbnail Image
-                                      Image.asset(
-                                        galleryItem['thumbnailUrl'] ??
-                                            '../images/img.png',
-                                        fit: BoxFit.fill,
-                                        height: 100,
-                                        width: 100,
-                                      ),
-
-                                      const SizedBox(height: 5),
-
-                                      // Image name displayed under the thumbnail
-                                      Text(
-                                        galleryItem['title'] != null &&
-                                                galleryItem['title'].length > 25
-                                            ? '${galleryItem['title']!.substring(0, 25)}...'
-                                            : galleryItem['title'] ?? 'Unknown',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text(
-                              'No gallery items found.',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          );
-
-                  default:
-                    return Container();
-                }
-              },
+                    ),
+                  );
+                }),
+            const SizedBox(height: 20),
+            // Display selected Album Name
+            Text(
+              widget.albumName,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+
+            Expanded(
+              child: Consumer<GalleryProvider>(
+                builder: (context, galleryProvider, child) {
+                  switch (galleryProvider.networkState) {
+                    case NetworkState.loading:
+                      return Center(child: CircularProgressIndicator());
+
+                    case NetworkState.failure:
+                      return const Center(
+                        child: Text(
+                          'Failed to load gallery. Please try again later.',
+                          style: TextStyle(color: Colors.red, fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+
+                    case NetworkState.success:
+                      return galleryProvider.gallery.isNotEmpty
+                          ? GridView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 40,
+                                childAspectRatio: 1,
+                              ),
+                              itemCount: galleryProvider.gallery.length,
+                              itemBuilder: (context, index) {
+                                var galleryItem =
+                                    galleryProvider.gallery[index];
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PhotoPage(
+                                          albumId: widget.albumId,
+                                          albumName: widget.albumName,
+                                          userId: widget.userId,
+                                          userName: widget.userName,
+                                          photoName: galleryItem['title'],
+                                          photoUrl: galleryItem['url'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Column(
+                                      children: [
+                                        // Thumbnail Image
+                                        Image.asset(
+                                          '../images/img.png',
+                                          fit: BoxFit.fill,
+                                          height: 40,
+                                          width: 40,
+                                        ),
+
+                                        const SizedBox(height: 10),
+
+                                        // Image name displayed under the thumbnail
+                                        Text(
+                                          galleryItem['title'] != null &&
+                                                  galleryItem['title'].length >
+                                                      15
+                                              ? '${galleryItem['title']!.substring(0, 15)}...'
+                                              : galleryItem['title'] ??
+                                                  'Unknown',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                'No gallery items found.',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            );
+
+                    default:
+                      return Container();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
