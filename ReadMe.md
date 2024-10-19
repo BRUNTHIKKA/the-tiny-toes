@@ -3,20 +3,22 @@
 The Tiny Toes App is a Flutter application designed for users to manage and view albums associated with their accounts. The app features user authentication and provides a responsive interface for album management.
 
 ## Table of contents
-- [The Tiny Toes App](#the-tiny-toes-app)
-  - [Table of contents](#table-of-contents)
-  - [Features](#features)
-  - [Technologies Used](#technologies-used)
-  - [Prerequisites](#prerequisites)
-  - [Setup and Installation](#setup-and-installation)
-  - [Running the Project](#running-the-project)
-  - [Testing Login Credentials](#testing-login-credentials)
+
+   - [Features](#features)
+   - [Technologies Used](#technologies-used)
+   - [Prerequisites](#prerequisites)
+   - [Setup and Installation](#setup-and-installation)
+   - [Running the Project](#running-the-project)
+   - [Testing Login Credentials](#testing-login-credentials)
+   - [Developed by](#developed-by)
 
 ## Features
 
 - User authentication with login and logout functionality.
-- View and manage user-specific albums.
-- Responsive design optimized for both mobile and tablet devices.
+- View all the users.
+- View user-specific albums.
+- View gallery for a specific album
+- Preview photos of a gallery
 
 ## Technologies Used
 
@@ -52,13 +54,13 @@ To set up and run this project, follow these steps:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/thetinytoes_app.git
+   git clone https://github.com/BRUNTHIKKA/the-tiny-toes.git
    ```
 
 2. **Navigate to the project directory**:
 
    ```bash
-   cd thetinytoes/client/apps/thetinytoes_app/
+   cd the-tiny-toes/client/apps/thetinytoes_app/
    ```
 
 3. **Install Flutter SDK**:
@@ -90,3 +92,8 @@ For testing purposes, you can use the following credentials:
 - **Password:** `user123`
 
 These credentials will allow you to log into the app and access the features available to a typical user.
+
+
+## Developed by
+
+Brunthikka G. | Mobile App Developer | [Portfolio](https://brunthikka.github.io/MyPortfolio/) | [LinkedIn](https://www.linkedin.com/in/brunthikka-gurunathan/)
