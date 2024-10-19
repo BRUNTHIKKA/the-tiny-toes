@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/network_service.dart';
+import 'package:thetinytoes_app/services/network_service.dart';
 
 class AlbumProvider extends ChangeNotifier {
   List<dynamic> _albums = [];

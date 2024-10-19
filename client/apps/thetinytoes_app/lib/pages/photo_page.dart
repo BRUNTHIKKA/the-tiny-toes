@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/components/navbar.dart';
 import 'package:thetinytoes_app/pages/gallery_page.dart';
 import 'package:thetinytoes_app/providers/gallery_provider.dart';
-import 'package:thetinytoes_app/services/storage_service.dart';
 
 class PhotoPage extends StatefulWidget {
   final int albumId;
@@ -27,7 +26,6 @@ class PhotoPage extends StatefulWidget {
 }
 
 class _PhotosState extends State<PhotoPage> {
-  String? loggedUsername;
 
   @override
   void initState() {
@@ -37,15 +35,6 @@ class _PhotosState extends State<PhotoPage> {
       final galleryProvider =
           Provider.of<GalleryProvider>(context, listen: false);
       galleryProvider.fetchGallery(widget.userId);
-      fetchUsername();
-    });
-  }
-
-  void fetchUsername() async {
-    final storageService = Provider.of<StorageService>(context, listen: false);
-    String? username = await storageService.getUsername();
-    setState(() {
-      loggedUsername = username;
     });
   }
 
@@ -59,7 +48,6 @@ class _PhotosState extends State<PhotoPage> {
             // Navbar
             Navbar(
                 title: "Gallery",
-                username: loggedUsername,
                 goBack: () {
                   // Navigate to GalleryPage on back button click
                   Navigator.push(

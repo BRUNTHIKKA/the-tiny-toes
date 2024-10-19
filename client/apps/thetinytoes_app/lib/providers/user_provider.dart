@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/network_service.dart';
-import '../services/storage_service.dart';
+import 'package:thetinytoes_app/services/network_service.dart';
+import 'package:thetinytoes_app/services/storage_service.dart';
 
 class UserProvider with ChangeNotifier {
   final NetworkService networkService = NetworkService();

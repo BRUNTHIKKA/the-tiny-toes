@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/providers/gallery_provider.dart';
-import 'providers/album_provider.dart';
-import 'providers/auth_provider.dart';
-import 'services/storage_service.dart';
-import 'providers/user_provider.dart';
-import 'pages/login_page.dart';
-import 'pages/users_page.dart';
+import 'package:thetinytoes_app/providers/album_provider.dart';
+import 'package:thetinytoes_app/providers/auth_provider.dart';
+import 'package:thetinytoes_app/services/storage_service.dart';
+import 'package:thetinytoes_app/providers/user_provider.dart';
+import 'package:thetinytoes_app/pages/login_page.dart';
+import 'package:thetinytoes_app/pages/users_page.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;

@@ -3,17 +3,39 @@ import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/pages/login_page.dart';
 import 'package:thetinytoes_app/services/storage_service.dart';
 
-class Navbar extends StatelessWidget {
+class Navbar extends StatefulWidget {
   final String title;
-  final String? username;
-  final VoidCallback? goBack; // Nullable to indicate optional back button
+  final VoidCallback? goBack;
 
-  Navbar({
+  const Navbar({
+    Key? key,
     required this.title,
-    required this.username,
-    this.goBack, // Allow null for goBack
-  });
+    this.goBack,
+  }) : super(key: key);
 
+  @override
+  _NavbarState createState() => _NavbarState();
+}
+
+class _NavbarState extends State<Navbar> {
+  String? loggedUsername;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsername(); // Fetch the username when the widget is initialized
+  }
+
+  // Fetch the username from the storage service.
+  Future<void> fetchUsername() async {
+    final storageService = Provider.of<StorageService>(context, listen: false);
+    String? username = await storageService.getUsername();
+    setState(() {
+      loggedUsername = username; // Update the state with the fetched username
+    });
+  }
+
+  // Handle user logout.
   void logout(BuildContext context) async {
     final storageService = Provider.of<StorageService>(context, listen: false);
     await storageService.clearStorage();
@@ -29,8 +51,8 @@ class Navbar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Row(
         children: [
-          // Conditionally show the back button only if goBack is provided
-          if (goBack != null)
+          // Conditionally show the back button
+          if (widget.goBack != null)
             Container(
               width: 35,
               height: 35,
@@ -42,7 +64,7 @@ class Navbar extends StatelessWidget {
                 ),
               ),
               child: IconButton(
-                onPressed: goBack,
+                onPressed: widget.goBack,
                 icon: const Icon(
                   Icons.arrow_back_ios_new,
                   size: 20,
@@ -50,9 +72,9 @@ class Navbar extends StatelessWidget {
                 ),
               ),
             ),
-          if (goBack != null)
-            SizedBox(width: 10), // Add space if back button is present
+          if (widget.goBack != null) const SizedBox(width: 10),
 
+          // Logout button
           Container(
             height: 30,
             width: 100,
@@ -61,7 +83,7 @@ class Navbar extends StatelessWidget {
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
                 side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(color: Colors.red),
+                  const BorderSide(color: Colors.red),
                 ),
                 textStyle: MaterialStateProperty.all<TextStyle>(
                   const TextStyle(fontSize: 14),
@@ -76,23 +98,26 @@ class Navbar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 20),
+          // Title text
           Text(
-            title,
-            style: TextStyle(
+            widget.title,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
           const Spacer(),
+          // Display the username or loading indicator
           Text(
-            username ?? 'Loading...',
+            loggedUsername ?? 'Loading...',
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
+
           Container(
             width: 35,
             height: 35,

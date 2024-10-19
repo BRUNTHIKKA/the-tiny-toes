@@ -25,9 +25,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     authProvider =
-        Provider.of<AuthProvider>(context, listen: false); // Get auth provider
+        Provider.of<AuthProvider>(context, listen: false);
     storageService = Provider.of<StorageService>(context,
-        listen: false); // Get storage service
+        listen: false);
 
     return Scaffold(
       body: Padding(

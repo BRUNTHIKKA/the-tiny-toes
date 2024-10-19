@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/components/navbar.dart';
 import 'package:thetinytoes_app/pages/gallery_page.dart';
 import 'package:thetinytoes_app/services/network_service.dart';
-import 'package:thetinytoes_app/services/storage_service.dart';
 import 'package:thetinytoes_app/pages/users_page.dart';
-import '../providers/album_provider.dart';
+import 'package:thetinytoes_app/providers/album_provider.dart';
 
 class AlbumPage extends StatefulWidget {
   final int userId;
@@ -18,8 +17,6 @@ class AlbumPage extends StatefulWidget {
 }
 
 class _AlbumPageState extends State<AlbumPage> {
-  String? loggedUsername;
-
   @override
   void initState() {
     super.initState();
@@ -27,16 +24,6 @@ class _AlbumPageState extends State<AlbumPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final albumProvider = Provider.of<AlbumProvider>(context, listen: false);
       albumProvider.fetchAlbums(widget.userId);
-      fetchUsername();
-    });
-  }
-
-  // Method to fetch the username
-  void fetchUsername() async {
-    final storageService = Provider.of<StorageService>(context, listen: false);
-    String? username = await storageService.getUsername(); // Fetch username
-    setState(() {
-      loggedUsername = username; // Update state with the fetched username
     });
   }
 
@@ -50,7 +37,6 @@ class _AlbumPageState extends State<AlbumPage> {
             // Navbar
             Navbar(
                 title: "Album",
-                username: loggedUsername,
                 goBack: () {
                   // Navigate to GalleryPage on back button click
                   Navigator.push(
@@ -83,7 +69,7 @@ class _AlbumPageState extends State<AlbumPage> {
                     case NetworkState.failure:
                       return const Center(
                         child: Text(
-                          'Failed to load albums. Please try again later.',
+                          'Failed to load albums.',
                           style: TextStyle(color: Colors.red, fontSize: 18),
                           textAlign: TextAlign.center,
                         ),

@@ -36,4 +36,5 @@ class NetworkService {
   }
 }
 
+// Manage different network states
 enum NetworkState { idle, loading, success, failure }

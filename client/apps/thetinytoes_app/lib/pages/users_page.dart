@@ -3,8 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:thetinytoes_app/components/navbar.dart';
 import 'package:thetinytoes_app/pages/album_page.dart';
 import 'package:thetinytoes_app/services/network_service.dart';
-import '../providers/user_provider.dart';
-import '../services/storage_service.dart';
+import 'package:thetinytoes_app/providers/user_provider.dart';
 
 class UsersPage extends StatefulWidget {
   @override
@@ -12,26 +11,14 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  String? loggedUsername;
-
   @override
   void initState() {
     super.initState();
 
-    // Fetch users after the first frame is rendered to avoid calling fetch during build
+    // Fetch users after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.fetchUsers();
-      fetchUsername();
-    });
-  }
-
-  // Method to fetch the username
-  void fetchUsername() async {
-    final storageService = Provider.of<StorageService>(context, listen: false);
-    String? username = await storageService.getUsername(); // Fetch username
-    setState(() {
-      loggedUsername = username; // Update state with the fetched username
     });
   }
 
@@ -45,8 +32,7 @@ class _UsersPageState extends State<UsersPage> {
         child: Column(
           children: [
             // Navbar
-            Navbar(title: "Users", username: loggedUsername, goBack: null),
-            // Add user list or relevant UI based on network state
+            Navbar(title: "Users", goBack: null),
             Expanded(
               child: _buildBody(userProvider),
             ),

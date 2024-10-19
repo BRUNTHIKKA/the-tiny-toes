@@ -5,7 +5,6 @@ import 'package:thetinytoes_app/pages/album_page.dart';
 import 'package:thetinytoes_app/providers/gallery_provider.dart';
 import 'package:thetinytoes_app/services/network_service.dart';
 import 'package:thetinytoes_app/pages/photo_page.dart';
-import 'package:thetinytoes_app/services/storage_service.dart';
 
 class GalleryPage extends StatefulWidget {
   final int albumId;
@@ -25,7 +24,6 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
-  String? loggedUsername;
 
   @override
   void initState() {
@@ -35,16 +33,6 @@ class _GalleryPageState extends State<GalleryPage> {
       final galleryProvider =
           Provider.of<GalleryProvider>(context, listen: false);
       galleryProvider.fetchGallery(widget.albumId);
-      fetchUsername();
-    });
-  }
-
-  // Method to fetch the username
-  void fetchUsername() async {
-    final storageService = Provider.of<StorageService>(context, listen: false);
-    String? username = await storageService.getUsername();
-    setState(() {
-      loggedUsername = username;
     });
   }
 
@@ -58,7 +46,6 @@ class _GalleryPageState extends State<GalleryPage> {
             // Navbar
             Navbar(
                 title: "Gallery",
-                username: loggedUsername,
                 goBack: () {
                   // Navigate to AlbumPage on back button click
                   Navigator.push(
@@ -92,7 +79,7 @@ class _GalleryPageState extends State<GalleryPage> {
                     case NetworkState.failure:
                       return const Center(
                         child: Text(
-                          'Failed to load gallery. Please try again later.',
+                          'Failed to load gallery.',
                           style: TextStyle(color: Colors.red, fontSize: 18),
                           textAlign: TextAlign.center,
                         ),
